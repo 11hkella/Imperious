@@ -2,7 +2,7 @@ import { Color, DisplayMode, Engine, FadeInOut } from "excalibur";
 import ImperiousLoader from "./ImperiousLoader";
 import { Board } from "./Board";
 
-const Game = new Engine({
+const GameEngine = new Engine({
   width: 800,
   height: 600,
   displayMode: DisplayMode.FitScreenAndFill,
@@ -17,13 +17,12 @@ const Game = new Engine({
   // fixedUpdateTimestep: 16 // Turn on fixed update timestep when consistent physic simulation is important
 });
 
-await Game.start("game", {
+await GameEngine.start("game", {
   loader: ImperiousLoader,
   inTransition: new FadeInOut({
-    // Optional in transition
-    duration: 1000,
+    duration: 2000,
     direction: "in",
-    color: Color.ExcaliburBlue,
+    color: Color.Brown,
   }),
 });
 

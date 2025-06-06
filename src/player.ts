@@ -5,6 +5,7 @@ import {
   Engine,
   Side,
   vec,
+  Vector,
 } from "excalibur";
 import { Resources } from "./resources";
 
@@ -20,21 +21,27 @@ import { Resources } from "./resources";
 // actor.actions
 // actor.pointer
 
+// Giving your actor a name is optional, but helps in debugging using the dev tools or debug mode
+// https://github.com/excaliburjs/excalibur-extension/
+// Chrome: https://chromewebstore.google.com/detail/excalibur-dev-tools/dinddaeielhddflijbbcmpefamfffekc
+// Firefox: https://addons.mozilla.org/en-US/firefox/addon/excalibur-dev-tools/
+
 export class Player extends Actor {
   constructor() {
-    super({
-      // Giving your actor a name is optional, but helps in debugging using the dev tools or debug mode
-      // https://github.com/excaliburjs/excalibur-extension/
-      // Chrome: https://chromewebstore.google.com/detail/excalibur-dev-tools/dinddaeielhddflijbbcmpefamfffekc
-      // Firefox: https://addons.mozilla.org/en-US/firefox/addon/excalibur-dev-tools/
+    const config = {
       name: "Player",
-      pos: vec(150, 150),
+      pos: vec(0, 0),
       width: 100,
       height: 100,
       // anchor: vec(0, 0), // Actors default center colliders and graphics with anchor (0.5, 0.5)
       // collisionType: CollisionType.Active, // Collision Type Active means this participates in collisions read more https://excaliburjs.com/docs/collisiontypes
-    });
+    };
+    super(config);
+
+    this.initialPosition = config.pos;
   }
+
+  initialPosition: Vector;
 
   override onInitialize() {
     // Generally recommended to stick logic in the "On initialize"
@@ -46,13 +53,21 @@ export class Player extends Actor {
     // 4. Lazy instantiation
     this.graphics.add(Resources.Sword.toSprite());
 
-    // Actions are useful for scripting common behavior, for example patrolling enemies
-    this.actions.delay(2000);
+    // vertical movement
     this.actions.repeatForever((ctx) => {
-      ctx.moveBy({ offset: vec(1, 0), duration: 1000 });
-      ctx.moveBy({ offset: vec(0, 1), duration: 1000 });
-      ctx.moveBy({ offset: vec(-1, 0), duration: 1000 });
-      ctx.moveBy({ offset: vec(0, -1), duration: 1000 });
+      ctx.moveBy({ offset: vec(6, -4), duration: 200 });
+      ctx.moveBy({ offset: vec(-4, -6), duration: 700 });
+      ctx.moveBy({ offset: vec(10, -2), duration: 300 });
+      ctx.moveBy({ offset: vec(-6, 10), duration: 700 });
+      ctx.moveBy({ offset: vec(3, 3), duration: 600 });
+
+      console.log(this.initialPosition.toString(), "->", this.pos.toString());
+
+      ctx.moveTo({
+        pos: this.initialPosition,
+        duration: 100,
+        easing: (t) => t * t,
+      });
     });
 
     // Sometimes you want to click on an actor!
