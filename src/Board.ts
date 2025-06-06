@@ -1,46 +1,97 @@
 import {
-  DefaultLoader,
+  Actor,
+  Collider,
+  CollisionContact,
   Engine,
-  ExcaliburGraphicsContext,
-  Scene,
-  SceneActivationContext,
+  Side,
+  vec,
+  Vector,
 } from "excalibur";
-import { Player } from "./player";
+import { Resources } from "./resources";
+import { Game } from "./Game";
 
-export class Board extends Scene {
-  override onInitialize(engine: Engine): void {
-    // Scene.onInitialize is where we recommend you perform the composition for your game
-    const player = new Player();
-    this.add(player); // Actors need to be added to a scene to be drawn
+// Actors are the main unit of composition you'll likely use, anything that you want to draw and move around the screen
+// is likely built with an actor
+
+// They contain a bunch of useful components that you might use
+// actor.transform
+// actor.motion
+// actor.graphics
+// actor.body
+// actor.collider
+// actor.actions
+// actor.pointer
+
+// Giving your actor a name is optional, but helps in debugging using the dev tools or debug mode
+// https://github.com/excaliburjs/excalibur-extension/
+// Chrome: https://chromewebstore.google.com/detail/excalibur-dev-tools/dinddaeielhddflijbbcmpefamfffekc
+// Firefox: https://addons.mozilla.org/en-US/firefox/addon/excalibur-dev-tools/
+
+export class Board extends Actor {
+  constructor() {
+    const minViewSize = Math.min(Game.length, Game.length);
+    const config = {
+      name: "Board",
+      width: minViewSize,
+      height: minViewSize,
+      // anchor: vec(0, 0), // Actors default center colliders and graphics with anchor (0.5, 0.5)
+      // collisionType: CollisionType.Active, // Collision Type Active means this participates in collisions read more https://excaliburjs.com/docs/collisiontypes
+    };
+    super(config);
   }
 
-  override onPreLoad(loader: DefaultLoader): void {
-    // Add any scene specific resources to load
-  }
-
-  override onActivate(context: SceneActivationContext<unknown>): void {
-    // Called when Excalibur transitions to this scene
-    // Only 1 scene is active at a time
-  }
-
-  override onDeactivate(context: SceneActivationContext): void {
-    // Called when Excalibur transitions away from this scene
-    // Only 1 scene is active at a time
+  override onInitialize() {
+    // Sometimes you want to click on an actor!
+    this.on("pointerdown", (evt) => {
+      // Pointer events tunnel in z order from the screen down, you can cancel them!
+      // if (true) {
+      //   evt.cancel();
+      // }
+      console.log("You clicked the actor @", evt.worldPos.toString());
+    });
   }
 
   override onPreUpdate(engine: Engine, elapsedMs: number): void {
-    // Called before anything updates in the scene
+    // Put any update logic here runs every frame before Actor builtins
   }
 
   override onPostUpdate(engine: Engine, elapsedMs: number): void {
-    // Called after everything updates in the scene
+    // Put any update logic here runs every frame after Actor builtins
   }
 
-  override onPreDraw(ctx: ExcaliburGraphicsContext, elapsedMs: number): void {
-    // Called before Excalibur draws to the screen
+  override onPreCollisionResolve(
+    self: Collider,
+    other: Collider,
+    side: Side,
+    contact: CollisionContact
+  ): void {
+    // Called before a collision is resolved, if you want to opt out of this specific collision call contact.cancel()
   }
 
-  override onPostDraw(ctx: ExcaliburGraphicsContext, elapsedMs: number): void {
-    // Called after Excalibur draws to the screen
+  override onPostCollisionResolve(
+    self: Collider,
+    other: Collider,
+    side: Side,
+    contact: CollisionContact
+  ): void {
+    // Called every time a collision is resolved and overlap is solved
+  }
+
+  override onCollisionStart(
+    self: Collider,
+    other: Collider,
+    side: Side,
+    contact: CollisionContact
+  ): void {
+    // Called when a pair of objects are in contact
+  }
+
+  override onCollisionEnd(
+    self: Collider,
+    other: Collider,
+    side: Side,
+    lastContact: CollisionContact
+  ): void {
+    // Called when a pair of objects separates
   }
 }

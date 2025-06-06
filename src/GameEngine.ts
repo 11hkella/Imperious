@@ -1,6 +1,6 @@
 import { Color, DisplayMode, Engine, FadeInOut } from "excalibur";
 import ImperiousLoader from "./ImperiousLoader";
-import { Board } from "./Board";
+import { Game } from "./Game";
 
 const GameEngine = new Engine({
   width: 800,
@@ -8,7 +8,7 @@ const GameEngine = new Engine({
   displayMode: DisplayMode.FitScreenAndFill,
   pixelArt: true,
   scenes: {
-    game: Board,
+    game: Game,
   },
   // physics: {
   //   solver: SolverStrategy.Realistic,
