@@ -16,4 +16,5 @@ export const GameBoard = styled.div`
   aspect-ratio: 1;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(12, 1fr);
+  padding: 6px;
 `;
