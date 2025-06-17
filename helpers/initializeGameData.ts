@@ -1,13 +1,13 @@
-import { GameData, Turrain } from "./interface";
+import { Tile, Turrain } from "../interface";
 
 export const initializeGameData = () => {
   const numRows = 12;
   const numCols = 12;
 
-  const gameData: GameData[][] = [];
+  const gameData: Tile[][] = [];
 
   for (let row = 0; row < numRows; row++) {
-    const rowData: GameData[] = [];
+    const rowData: Tile[] = [];
     for (let col = 0; col < numCols; col++) {
       const id = `${row + 1}-${col + 1}`;
       rowData.push({

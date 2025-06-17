@@ -1,8 +1,3 @@
-export enum Turrain {
-  FIELD = "field",
-  MOUNTAIN = "mountain",
-  FOREST = "forest",
-}
 
 export enum PieceType {
   PIKE = "pike",
@@ -16,14 +11,8 @@ export enum PieceType {
   // NPC = "npc",
 }
 
-export interface Occupant {
+export interface Piece {
   id: string;
   type: PieceType;
   team: number;
-}
-
-export interface GameData {
-  id: string;
-  turrain: Turrain;
-  occupant: Occupant | null;
 }

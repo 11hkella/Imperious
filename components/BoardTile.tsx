@@ -1,7 +1,7 @@
-import { GameData } from "@/app/interface";
+import { Tile } from "@/interface";
 import styled from "styled-components";
 
-export const GameTile = ({ tileData }: { tileData: GameData }) => {
+export const BoardTile = ({ tileData }: { tileData: Tile }) => {
   const { id, turrain, occupant } = tileData;
 
   return (
