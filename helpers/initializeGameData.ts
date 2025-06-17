@@ -1,24 +1,13 @@
-import { Tile, Turrain } from "../interface";
-import { configuredTurrain } from "./terrainConfig";
+import { PieceType } from "@/interface";
+import { initializeBoardData } from "./initalizeBoardData";
+import { initializeArmyData } from "./initializeArmyData";
 
 export const initializeGameData = () => {
-  const numRows = 12;
-  const numCols = 12;
+  const board = initializeBoardData();
 
-  const gameData: Tile[][] = [];
+  const player1Pieces = initializeArmyData("Player1");
 
-  for (let row = 0; row < numRows; row++) {
-    const rowData: Tile[] = [];
-    for (let col = 0; col < numCols; col++) {
-      const id = `${row + 1}-${col + 1}`;
-      rowData.push({
-        id,
-        turrain: configuredTurrain[id] || Turrain.FIELD,
-        occupant: null,
-      });
-    }
-    gameData.push(rowData);
-  }
+  board['1-6'].occupant = player1Pieces.find((piece) => piece.type === PieceType.KING);
 
-  return gameData;
+  return board;
 };

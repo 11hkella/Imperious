@@ -1,9 +1,9 @@
-export const KingIcon = () => {
+export const KingIcon = ({ height = '10px', width = '10px' }) => {
   return (
     // <? xml version = "1.0" encoding = "utf-8" ?>
     // < !--Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools-- >
     // < !DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
-    <svg fill="#000000" width="800px" height="800px" viewBox="0 0 1000 1000" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 1000 1000" xmlSpace="preserve">
+    <svg fill="#000000" width={width} height={height} viewBox="0 0 1000 1000" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" enableBackground="new 0 0 1000 1000" xmlSpace="preserve">
 
       <g>
 

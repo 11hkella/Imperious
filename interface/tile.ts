@@ -9,5 +9,6 @@ export enum Turrain {
 export interface Tile {
   id: string;
   turrain: Turrain;
-  occupant: Piece | null;
+  occupant?: Piece;
+  position: { row: number; col: number };
 }
