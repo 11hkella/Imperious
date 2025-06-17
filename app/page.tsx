@@ -13,7 +13,6 @@ export default function Page() {
   // index row,col
   const [gameData, setGetData] = useState<GameData[][]>(initializeGameData());
 
-  console.log("gameData", gameData);
   return (
     <PageWrapper>
       {/* <h1>Welcome to Imperious</h1> */}
