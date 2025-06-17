@@ -3,7 +3,8 @@ export enum PieceType {
   PIKE = "pike",
   AXE = "axe",
   KING = "king",
-  NOBLE = "noble",
+  NOBLEAXE = "nobleAxe",
+  NOBLESWORD = "nobleSword",
   ARCHER = "archer",
   CAVALRY = "cavalry",
   SQUIRE = "squire",
@@ -14,5 +15,8 @@ export enum PieceType {
 export interface Piece {
   id: string;
   type: PieceType;
-  team: number;
+  team: string;
+  svgElement: React.ReactElement;
+  hasMoved: boolean;
+  isAlive: boolean;
 }
