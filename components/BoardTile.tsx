@@ -14,7 +14,10 @@ export const BoardTile = ({ tileData }: { tileData: Tile }) => {
 
   return (
     <GameTileContainer ref={tileRef}>
-      {occupant && occupant.svgElement(tileSize)}
+      {occupant && <PieceIconContainer onClick={() => { }}>
+        {occupant.svgElement(tileSize)}
+      </PieceIconContainer>
+      }
       <TileLabel>{id}</TileLabel>
     </GameTileContainer>
   );
@@ -30,4 +33,9 @@ const GameTileContainer = styled.div`
 const TileLabel = styled.p`
   color: grey;
   position: absolute;
+  cursor: default;
+  z-index: -1;
 `
+const PieceIconContainer = styled.div`
+  cursor: pointer;
+`;
