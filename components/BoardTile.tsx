@@ -1,5 +1,5 @@
-import { Tile, Turrain } from "@/interface";
-import { Dispatch, SetStateAction, useRef } from "react";
+import { Piece, Tile, Turrain } from "@/interface";
+import { Dispatch, SetStateAction, useCallback, useRef } from "react";
 import styled from "styled-components";
 import { fieldColor, mountainColor, forestColor } from "./styles/colors";
 
@@ -13,6 +13,10 @@ export const BoardTile = ({ tileData, setGameData }: { tileData: Tile, setGameDa
     height: `${tileRef.current?.offsetHeight}px`,
     width: `${tileRef.current?.offsetWidth}px`
   }
+
+  const onPieceClick = useCallback((piece: Piece) => {
+    
+  }, [])
 
   return (
     <GameTileContainer ref={tileRef} turrain={turrain}>
