@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Tile } from "../interface";
 import { GameBoard, PageWrapper } from "./pageStyles";
 import { initializeGameData } from "../helpers/initializeGameData";
 import { BoardTile } from "@/components/BoardTile";
@@ -10,7 +9,7 @@ export default function Page() {
   // todo: create user login and authentication flow
 
   // index row,col
-  const [gameData, setGetData] = useState(initializeGameData());
+  const [gameData, setGameData] = useState(initializeGameData());
 
   console.log("gameData at start of game:", gameData);
   return (
@@ -19,7 +18,7 @@ export default function Page() {
 
       <GameBoard>
         {Object.values(gameData).map((tileData) => (
-          <BoardTile tileData={tileData} key={tileData.id} />
+          <BoardTile tileData={tileData} key={tileData.id} setGameData={setGameData} />
         ))}
       </GameBoard>
     </PageWrapper>
