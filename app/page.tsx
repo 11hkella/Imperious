@@ -1,28 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import { GameData } from "./interface";
 import { GameBoard, PageWrapper } from "./pageStyles";
-import { initialize } from "next/dist/server/lib/render-server";
-import { initializeGameData } from "./initializeGameData";
-import { GameTile } from "@/components/gameTile";
+import { initializeGameData } from "../helpers/initializeGameData";
+import { BoardTile } from "@/components/BoardTile";
 
 export default function Page() {
   // todo: create user login and authentication flow
 
   // index row,col
-  const [gameData, setGetData] = useState<GameData[][]>(initializeGameData());
+  const [gameData, setGameData] = useState(initializeGameData());
 
+  console.log("gameData at start of game:", gameData);
   return (
     <PageWrapper>
       {/* <h1>Welcome to Imperious</h1> */}
 
       <GameBoard>
-        {gameData.map((row, rowIndex) =>
-          row.map((tileData, colIndex) => (
-            <GameTile tileData={tileData} key={`${rowIndex}-${colIndex}`} />
-          ))
-        )}
+        {Object.values(gameData).map((tileData) => (
+          <BoardTile tileData={tileData} key={tileData.id} setGameData={setGameData} />
+        ))}
       </GameBoard>
     </PageWrapper>
   );

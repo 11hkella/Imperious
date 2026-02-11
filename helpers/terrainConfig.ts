@@ -1,28 +1,6 @@
-import { GameData, Turrain } from "./interface";
+import { Turrain } from "@/interface";
 
-export const initializeGameData = () => {
-  const numRows = 12;
-  const numCols = 12;
-
-  const gameData: GameData[][] = [];
-
-  for (let row = 0; row < numRows; row++) {
-    const rowData: GameData[] = [];
-    for (let col = 0; col < numCols; col++) {
-      const id = `${row + 1}-${col + 1}`;
-      rowData.push({
-        id,
-        turrain: configuredTurrain[id] || Turrain.FIELD,
-        occupant: null,
-      });
-    }
-    gameData.push(rowData);
-  }
-
-  return gameData;
-};
-
-const configuredTurrain: Record<string, Turrain> = {
+export const configuredTurrain: Record<string, Turrain> = {
   "1-1": Turrain.MOUNTAIN,
   "1-6": Turrain.MOUNTAIN,
   "1-7": Turrain.MOUNTAIN,
