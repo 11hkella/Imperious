@@ -1,5 +1,3 @@
-import { JSX } from "react";
-
 export enum PieceType {
   PIKE = "pike",
   AXE = "axe",
@@ -17,10 +15,6 @@ export interface Piece {
   id: string;
   type: PieceType;
   team: string;
-  svgElement: ({ height, width }: {
-    height?: string | undefined;
-    width?: string | undefined;
-  }) => JSX.Element;
   hasMoved: boolean;
   isAlive: boolean;
 }
