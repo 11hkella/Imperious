@@ -29,10 +29,9 @@ export const pieceTypeToSVG: Record<
 
 export interface PieceProps {
   piece?: PieceInterface;
-  tileSize?: { height: string; width: string };
 }
 
-export const Piece: React.FC<PieceProps> = ({ piece, tileSize }) => {
+export const Piece: React.FC<PieceProps> = ({ piece }) => {
   // Setup drag
   const [{ isDragging }, dragRef] = useDrag({
     type: "PIECE",
@@ -52,7 +51,7 @@ export const Piece: React.FC<PieceProps> = ({ piece, tileSize }) => {
       aria-grabbed={isDragging}
       tabIndex={0}
     >
-      <SvgComponent height={tileSize?.height} width={tileSize?.width} />
+      <SvgComponent />
     </PieceIconContainer>
   );
 };
@@ -60,6 +59,8 @@ export const Piece: React.FC<PieceProps> = ({ piece, tileSize }) => {
 const PieceIconContainer = styled.div<{ $isDragging?: boolean }>`
   cursor: grab;
   z-index: 5;
+  width: 100%;
+  height: 100%;
   opacity: ${({ $isDragging }) => ($isDragging ? 0.5 : 1)};
   ${({ $isDragging }) =>
     $isDragging &&

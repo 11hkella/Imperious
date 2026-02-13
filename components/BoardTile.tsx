@@ -20,13 +20,6 @@ export const BoardTile: React.FC<BoardTileProps> = ({
   // TODO: tile should set its own state for performance optimization
   const { id, turrain, occupant } = tileData;
 
-  const tileRef = useRef<HTMLDivElement>(null);
-
-  const tileSize = {
-    height: `${tileRef.current?.offsetHeight ?? 0}px`,
-    width: `${tileRef.current?.offsetWidth ?? 0}px`,
-  };
-
   // Setup drop
   const [{ isOver, canDrop }, dropRef] = useDrop({
     accept: "PIECE",
@@ -64,22 +57,16 @@ export const BoardTile: React.FC<BoardTileProps> = ({
     }),
   });
 
-  // Merge refs
-  const setRefs = (el: HTMLDivElement) => {
-    tileRef.current = el;
-    dropRef(el);
-  };
-
   return (
     <GameTileContainer
-      ref={setRefs}
+      ref={dropRef}
       turrain={turrain}
       $isOver={isOver}
       $canDrop={canDrop}
       $occupied={!!occupant}
       aria-dropeffect={canDrop ? "move" : undefined}
     >
-      <Piece piece={occupant} tileSize={tileSize} />
+      <Piece piece={occupant} />
       <TileLabel>{id}</TileLabel>
       {isOver && canDrop && <DropOverlay $valid />}
       {isOver && !canDrop && <DropOverlay />}
