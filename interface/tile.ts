@@ -2,7 +2,7 @@
 export interface TileDropTarget {
   tile: Tile;
 }
-import { Piece } from "./piece";
+import { PieceInterface } from "./piece";
 
 export enum Turrain {
   FIELD = "field",
@@ -13,6 +13,6 @@ export enum Turrain {
 export interface Tile {
   id: string;
   turrain: Turrain;
-  occupant?: Piece;
+  occupant?: PieceInterface;
   position: { row: number; col: number };
 }

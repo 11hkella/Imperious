@@ -2,10 +2,7 @@
 
 import styled, { css } from "styled-components";
 import { useDrag } from "react-dnd";
-import {
-  PieceType as PieceTypeEnum,
-  Piece as PieceInterface,
-} from "../interface/piece";
+import { PieceType as PieceTypeEnum, PieceInterface } from "../interface/piece";
 import { ArcherIcon } from "./svg/ArcherIcon";
 import { AxemanIcon } from "./svg/AxemanIcon";
 import { AxemanNobleIcon } from "./svg/AxemanNobleIcon";

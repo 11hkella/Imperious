@@ -11,9 +11,7 @@ interface GameBoardClientProps {
   initialGameData: Record<string, Tile>;
 }
 
-export default function GameBoardClient({
-  initialGameData,
-}: GameBoardClientProps) {
+const GameBoardClient = ({ initialGameData }: GameBoardClientProps) => {
   const [gameData, setGameData] =
     useState<Record<string, Tile>>(initialGameData);
 
@@ -30,4 +28,6 @@ export default function GameBoardClient({
       </GameBoard>
     </DndProvider>
   );
-}
+};
+
+export default GameBoardClient;

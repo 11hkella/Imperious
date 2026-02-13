@@ -1,6 +1,6 @@
 // Drag-and-drop payload for a piece
 export interface PieceDragItem {
-  piece: Piece;
+  piece: PieceInterface;
   sourceTile: import("./tile").Tile;
 }
 export enum PieceType {
@@ -16,7 +16,7 @@ export enum PieceType {
   // NPC = "npc",
 }
 
-export interface Piece {
+export interface PieceInterface {
   id: string;
   type: PieceType;
   team: string;
