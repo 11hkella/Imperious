@@ -32,15 +32,27 @@ export const BoardTile: React.FC<BoardTileProps> = ({
     accept: "PIECE",
     canDrop: (item: any) => {
       // Validate move
-      return isValidMove(
-        item.piece,
-        { ...tileData, occupant: item.piece },
-        tileData,
-      );
+      const fromTile = item.sourceTile || tileData;
+      return isValidMove(item.piece, fromTile, tileData);
     },
     drop: (item: any) => {
       // Only allow drop if valid
-      if (!isValidMove(item.piece, item.piece.tile, tileData)) return;
+      if (!isValidMove(item.piece, item.sourceTile, tileData)) return;
+      setGameData((prev) => {
+        // Remove piece from source tile, add to target tile
+        const newData = { ...prev };
+        // Find source tile
+        const sourceTileId = item.sourceTile?.id;
+        if (sourceTileId && newData[sourceTileId]) {
+          newData[sourceTileId] = {
+            ...newData[sourceTileId],
+            occupant: undefined,
+          };
+        }
+        // Place piece on target tile
+        newData[id] = { ...newData[id], occupant: item.piece };
+        return newData;
+      });
       return { targetTileId: id };
     },
     collect: (monitor) => ({

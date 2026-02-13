@@ -35,19 +35,19 @@ export interface PieceProps {
   tileSize?: { height: string; width: string };
 }
 
-  if (!piece) return null;
-  const SvgComponent = pieceTypeToSVG[piece.type];
-  if (!SvgComponent) return null;
-
+export const Piece: React.FC<PieceProps> = ({ piece, tileSize }) => {
   // Setup drag
   const [{ isDragging }, dragRef] = useDrag({
     type: "PIECE",
-    item: { piece },
+    item: { piece, tileId: piece?.tileId }, // tileId will be injected by BoardTile
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
   });
 
+  if (!piece) return null;
+  const SvgComponent = pieceTypeToSVG[piece.type];
+  if (!SvgComponent) return null;
   return (
     <PieceIconContainer
       ref={dragRef}
