@@ -73,10 +73,13 @@ export const BoardTile: React.FC<BoardTileProps> = ({
       turrain={turrain}
       $isOver={isOver}
       $canDrop={canDrop}
+      $occupied={!!occupant}
       aria-dropeffect={canDrop ? "move" : undefined}
     >
       <PieceImage piece={occupant} tileSize={tileSize} />
       <TileLabel>{id}</TileLabel>
+      {isOver && canDrop && <DropOverlay $valid />}
+      {isOver && !canDrop && <DropOverlay />}
     </GameTileContainer>
   );
 };
@@ -85,6 +88,7 @@ const GameTileContainer = styled.div<{
   turrain: Turrain;
   $isOver?: boolean;
   $canDrop?: boolean;
+  $occupied?: boolean;
 }>`
   display: flex;
   align-items: center;
@@ -103,21 +107,26 @@ const GameTileContainer = styled.div<{
         return fieldColor;
     }
   }};
-  ${({ $isOver, $canDrop }) =>
-    $isOver &&
-    $canDrop &&
-    css`
-      outline: 3px solid #4caf50;
-      box-shadow: 0 0 8px #4caf50;
-    `}
-  ${({ $isOver, $canDrop }) =>
-    $isOver &&
-    !$canDrop &&
-    css`
-      outline: 3px solid #f44336;
-      box-shadow: 0 0 8px #f44336;
-      opacity: 0.7;
-    `}
+`;
+
+const DropOverlay = styled.div<{ $valid?: boolean }>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  background: ${
+    ({ $valid }) =>
+      $valid
+        ? "rgba(76, 175, 80, 0.25)" // green for valid
+        : "rgba(244, 67, 54, 0.25)" // red for invalid
+  };
+  border: ${({ $valid }) =>
+    $valid ? "2px solid #4caf50" : "2px solid #f44336"};
+  box-shadow: ${({ $valid }) =>
+    $valid ? "0 0 8px #4caf50" : "0 0 8px #f44336"};
 `;
 
 const TileLabel = styled.p`
