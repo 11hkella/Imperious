@@ -1,3 +1,8 @@
+// Drag-and-drop payload for a piece
+export interface PieceDragItem {
+  piece: Piece;
+  sourceTile: import("./tile").Tile;
+}
 export enum PieceType {
   PIKE = "pike",
   AXE = "axe",

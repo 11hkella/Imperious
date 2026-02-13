@@ -1,3 +1,7 @@
+// Drag-and-drop payload for a tile (if needed in future)
+export interface TileDropTarget {
+  tile: Tile;
+}
 import { Piece } from "./piece";
 
 export enum Turrain {
