@@ -2,10 +2,10 @@
 
 import { type Tile, Turrain } from "@/interface/tile";
 import { type Dispatch, type SetStateAction, useRef } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { useDrop } from "react-dnd";
 import { isValidMove } from "@/helpers/MovementConfig";
-import { PieceImage } from "./Piece";
+import { Piece } from "./Piece";
 import { fieldColor, mountainColor, forestColor } from "./styles/colors";
 
 export interface BoardTileProps {
@@ -79,7 +79,7 @@ export const BoardTile: React.FC<BoardTileProps> = ({
       $occupied={!!occupant}
       aria-dropeffect={canDrop ? "move" : undefined}
     >
-      <PieceImage piece={occupant} tileSize={tileSize} />
+      <Piece piece={occupant} tileSize={tileSize} />
       <TileLabel>{id}</TileLabel>
       {isOver && canDrop && <DropOverlay $valid />}
       {isOver && !canDrop && <DropOverlay />}
