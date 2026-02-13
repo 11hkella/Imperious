@@ -1,4 +1,7 @@
-import styled from "styled-components";
+"use client";
+
+import styled, { css } from "styled-components";
+import { useDrag } from "react-dnd";
 import {
   PieceType as PieceTypeEnum,
   Piece as PieceInterface,
@@ -32,18 +35,38 @@ export interface PieceProps {
   tileSize?: { height: string; width: string };
 }
 
-export const PieceImage = ({ piece, tileSize }: PieceProps) => {
   if (!piece) return null;
   const SvgComponent = pieceTypeToSVG[piece.type];
   if (!SvgComponent) return null;
+
+  // Setup drag
+  const [{ isDragging }, dragRef] = useDrag({
+    type: "PIECE",
+    item: { piece },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
   return (
-    <PieceIconContainer onClick={() => {}}>
+    <PieceIconContainer
+      ref={dragRef}
+      $isDragging={isDragging}
+      aria-grabbed={isDragging}
+      tabIndex={0}
+    >
       <SvgComponent height={tileSize?.height} width={tileSize?.width} />
     </PieceIconContainer>
   );
 };
 
-const PieceIconContainer = styled.div`
-  cursor: pointer;
+const PieceIconContainer = styled.div<{ $isDragging?: boolean }>`
+  cursor: grab;
   z-index: 5;
+  opacity: ${({ $isDragging }) => ($isDragging ? 0.5 : 1)};
+  ${({ $isDragging }) =>
+    $isDragging &&
+    css`
+      filter: drop-shadow(0 0 8px #8888ff);
+    `}
 `;
