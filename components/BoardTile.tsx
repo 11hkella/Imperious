@@ -39,17 +39,20 @@ export const BoardTile: React.FC<BoardTileProps> = ({
       // Only allow drop if valid
       if (!isValidMove(item.piece, item.sourceTile, tileData)) return;
       setGameData((prev) => {
-        // Remove piece from source tile, add to target tile
         const newData = { ...prev };
-        // Find source tile
         const sourceTileId = item.sourceTile?.id;
+        // Prevent dropping on same tile
+        if (sourceTileId === id) return prev;
+        // Prevent dropping on blocked terrain (should be handled by isValidMove, but double check)
+        if (tileData.turrain === Turrain.MOUNTAIN) return prev;
+        // Remove piece from source tile
         if (sourceTileId && newData[sourceTileId]) {
           newData[sourceTileId] = {
             ...newData[sourceTileId],
             occupant: undefined,
           };
         }
-        // Place piece on target tile
+        // Replace piece on target tile (capture/replace logic)
         newData[id] = { ...newData[id], occupant: item.piece };
         return newData;
       });
