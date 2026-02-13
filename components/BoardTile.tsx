@@ -4,6 +4,7 @@ import { type Tile, Turrain } from "@/interface/tile";
 import { type Dispatch, type SetStateAction, useRef } from "react";
 import styled, { css } from "styled-components";
 import { useDrop } from "react-dnd";
+import { isValidMove } from "@/helpers/MovementConfig";
 import { PieceImage } from "./Piece";
 import { fieldColor, mountainColor, forestColor } from "./styles/colors";
 
@@ -12,6 +13,10 @@ export interface BoardTileProps {
   setGameData: Dispatch<SetStateAction<Record<string, Tile>>>;
 }
 
+export const BoardTile: React.FC<BoardTileProps> = ({
+  tileData,
+  setGameData,
+}) => {
   // TODO: tile should set its own state for performance optimization
   const { id, turrain, occupant } = tileData;
 
@@ -25,8 +30,17 @@ export interface BoardTileProps {
   // Setup drop
   const [{ isOver, canDrop }, dropRef] = useDrop({
     accept: "PIECE",
+    canDrop: (item: any) => {
+      // Validate move
+      return isValidMove(
+        item.piece,
+        { ...tileData, occupant: item.piece },
+        tileData,
+      );
+    },
     drop: (item: any) => {
-      // Movement validation and state update will be handled in next steps
+      // Only allow drop if valid
+      if (!isValidMove(item.piece, item.piece.tile, tileData)) return;
       return { targetTileId: id };
     },
     collect: (monitor) => ({
@@ -78,13 +92,15 @@ const GameTileContainer = styled.div<{
     }
   }};
   ${({ $isOver, $canDrop }) =>
-    $isOver && $canDrop &&
+    $isOver &&
+    $canDrop &&
     css`
       outline: 3px solid #4caf50;
       box-shadow: 0 0 8px #4caf50;
     `}
   ${({ $isOver, $canDrop }) =>
-    $isOver && !$canDrop &&
+    $isOver &&
+    !$canDrop &&
     css`
       outline: 3px solid #f44336;
       box-shadow: 0 0 8px #f44336;
