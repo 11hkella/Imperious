@@ -19,7 +19,7 @@ export const BoardTile: React.FC<BoardTileProps> = ({
   setGameData,
 }) => {
   // TODO: tile should set its own state for performance optimization
-  const { id, turrain, occupant, position } = tileData;
+  const { id, turrain, occupant } = tileData;
 
   // Setup drop
   const [{ isOver, canDrop }, dropRef] = useDrop({
@@ -31,16 +31,12 @@ export const BoardTile: React.FC<BoardTileProps> = ({
       console.log({ item, fromTile, toTile: tileData, isvalid });
       return isvalid;
     },
-    drop: (item: any) => {
+    drop: (item: PieceDragItem) => {
       // Only allow drop if valid
-      if (!isValidMove(item.piece, item.sourceTile, tileData)) return;
+      if (!isValidMove(item.piece, item.tile, tileData)) return;
       setGameData((prev) => {
         const newData = { ...prev };
-        const sourceTileId = item.sourceTile?.id;
-        // Prevent dropping on same tile
-        if (sourceTileId === id) return prev;
-        // Prevent dropping on blocked terrain (should be handled by isValidMove, but double check)
-        if (tileData.turrain === Turrain.MOUNTAIN) return prev;
+        const sourceTileId = item.tile.id;
         // Remove piece from source tile
         if (sourceTileId && newData[sourceTileId]) {
           newData[sourceTileId] = {
