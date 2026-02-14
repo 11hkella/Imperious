@@ -1,41 +1,88 @@
-import { Piece, Tile, Turrain } from "@/interface";
-import { Dispatch, SetStateAction, useCallback, useRef } from "react";
-import styled from "styled-components";
-import { fieldColor, mountainColor, forestColor } from "./styles/colors";
+"use client";
 
-export const BoardTile = ({ tileData, setGameData }: { tileData: Tile, setGameData: Dispatch<SetStateAction<Record<string, Tile>>> }) => {
-  // TODO: tile should set it's own state for performance optimization
+import { type Tile, Turrain } from "@/interface/tile";
+import { type Dispatch, type SetStateAction } from "react";
+import styled from "styled-components";
+import { useDrop } from "react-dnd";
+import { isValidMove } from "@/helpers/MovementConfig";
+import { Piece } from "./Piece";
+import { fieldColor, mountainColor, forestColor } from "./styles/colors";
+import { PieceDragItem } from "@/interface";
+
+export interface BoardTileProps {
+  tileData: Tile;
+  setGameData: Dispatch<SetStateAction<Record<string, Tile>>>;
+}
+
+export const BoardTile: React.FC<BoardTileProps> = ({
+  tileData,
+  setGameData,
+}) => {
   const { id, turrain, occupant } = tileData;
 
-  const tileRef = useRef<HTMLDivElement>(null);
+  const [{ isOver, canDrop }, dropRef] = useDrop(() => {
+    return {
+      accept: "PIECE",
+      canDrop: (item: PieceDragItem) => {
+        const fromTile = item.tile;
+        const isvalid = isValidMove(item.piece, fromTile, tileData);
+        return isvalid;
+      },
+      drop: (item: PieceDragItem) => {
+        if (!isValidMove(item.piece, item.tile, tileData)) return;
 
-  const tileSize = {
-    height: `${tileRef.current?.offsetHeight}px`,
-    width: `${tileRef.current?.offsetWidth}px`
-  }
-
-  const onPieceClick = useCallback((piece: Piece) => {
-    
-  }, [])
+        setGameData((prev) => {
+          const newData = { ...prev };
+          const sourceTileId = item.tile.id;
+          // Remove piece from source tile
+          if (sourceTileId && newData[sourceTileId]) {
+            newData[sourceTileId] = {
+              ...newData[sourceTileId],
+              occupant: undefined,
+            };
+          }
+          // Replace piece on target tile (capture/replace logic)
+          newData[id] = { ...newData[id], occupant: item.piece };
+          return newData;
+        });
+        return { targetTileId: id };
+      },
+      collect: (monitor) => ({
+        isOver: monitor.isOver(),
+        canDrop: monitor.canDrop(),
+      }),
+    };
+  });
 
   return (
-    <GameTileContainer ref={tileRef} turrain={turrain}>
-      {occupant && <PieceIconContainer onClick={() => { }}>
-        {occupant.svgElement(tileSize)}
-      </PieceIconContainer>
-      }
+    <GameTileContainer
+      ref={dropRef}
+      turrain={turrain}
+      $isOver={isOver}
+      $canDrop={canDrop}
+      $occupied={!!occupant}
+      aria-dropeffect={canDrop ? "move" : undefined}
+    >
+      <Piece piece={occupant} tile={tileData} />
       <TileLabel>{id}</TileLabel>
+      {isOver && <DropOverlay $valid={canDrop} />}
     </GameTileContainer>
   );
 };
 
-const GameTileContainer = styled.div<{ turrain: Turrain }>`
+const GameTileContainer = styled.div<{
+  turrain: Turrain;
+  $isOver?: boolean;
+  $canDrop?: boolean;
+  $occupied?: boolean;
+}>`
   display: flex;
   align-items: center;
   justify-content: center;
   border: 1px solid var(--foreground);
-  background-color: ${({turrain}) => { 
-    switch(turrain) {
+  position: relative;
+  background-color: ${({ turrain }) => {
+    switch (turrain) {
       case Turrain.FIELD:
         return fieldColor;
       case Turrain.MOUNTAIN:
@@ -45,15 +92,31 @@ const GameTileContainer = styled.div<{ turrain: Turrain }>`
       default:
         return fieldColor;
     }
-  }}
+  }};
+`;
+
+const DropOverlay = styled.div<{ $valid?: boolean }>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  background: ${
+    ({ $valid }) =>
+      $valid
+        ? "rgba(76, 175, 80, 0.25)" // green for valid
+        : "rgba(244, 67, 54, 0.25)" // red for invalid
+  };
+  border: ${({ $valid }) =>
+    $valid ? "2px solid #4caf50" : "2px solid #f44336"};
+  box-shadow: ${({ $valid }) =>
+    $valid ? "0 0 8px #4caf50" : "0 0 8px #f44336"};
 `;
 
 const TileLabel = styled.p`
   color: grey;
   position: absolute;
   cursor: default;
-`
-const PieceIconContainer = styled.div`
-  cursor: pointer;
-  z-index: 5;
 `;

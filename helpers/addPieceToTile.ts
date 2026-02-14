@@ -1,10 +1,10 @@
-import { Tile, Piece } from "@/interface";
+import { Tile, PieceInterface } from "@/interface";
 
 export const addPieceToTile = (
   gameData: Tile[][],
   row: number,
   col: number,
-  piece: Piece
+  piece: PieceInterface,
 ): Tile[][] => {
   // Create a copy of the game data to avoid mutating the original state
   const newGameData = gameData.map((r) => r.map((tile) => ({ ...tile })));
@@ -18,4 +18,4 @@ export const addPieceToTile = (
   }
 
   return newGameData;
-}
+};

@@ -1,5 +1,10 @@
-import { JSX } from "react";
+import { Tile } from "./tile";
 
+// Drag-and-drop payload for a piece
+export interface PieceDragItem {
+  piece: PieceInterface;
+  tile: Tile;
+}
 export enum PieceType {
   PIKE = "pike",
   AXE = "axe",
@@ -13,14 +18,10 @@ export enum PieceType {
   // NPC = "npc",
 }
 
-export interface Piece {
-  id: string;
+export interface PieceInterface {
   type: PieceType;
+  unitNumber: number;
   team: string;
-  svgElement: ({ height, width }: {
-    height?: string | undefined;
-    width?: string | undefined;
-  }) => JSX.Element;
   hasMoved: boolean;
   isAlive: boolean;
 }

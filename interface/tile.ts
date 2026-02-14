@@ -1,4 +1,8 @@
-import { Piece } from "./piece";
+// Drag-and-drop payload for a tile (if needed in future)
+export interface TileDropTarget {
+  tile: Tile;
+}
+import { PieceInterface } from "./piece";
 
 export enum Turrain {
   FIELD = "field",
@@ -9,6 +13,11 @@ export enum Turrain {
 export interface Tile {
   id: string;
   turrain: Turrain;
-  occupant?: Piece;
-  position: { row: number; col: number };
+  occupant?: PieceInterface;
+  position: TilePosition;
+}
+
+export interface TilePosition {
+  row: number;
+  col: number;
 }
