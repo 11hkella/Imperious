@@ -1,41 +1,29 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { BoardTile } from "@/components/BoardTile";
 import type { Tile } from "@/interface/tile";
 import styled from "styled-components";
-import { useInitGame } from "./useInitGame";
+import { PieceInterface } from "@/interface";
 
-export const GameBoard = () => {
-  const teams = ["red", "blue"];
-  const { mapData: defaultGame, pieceData: defaultPieces } = useInitGame(teams);
-  const [gameData, setGameData] = useState<Record<string, Tile>>(defaultGame);
-  const [armyData, setArmyData] = useState(defaultPieces);
-  const [teamTurn, setTeamTurn] = useState(teams[0]);
-  const [pieceTurn, setPieceTurn] = useState<string | null>(null);
-
-  console.log({ gameData, armyData, teamTurn, pieceTurn });
-
-  const turnQueue = useMemo(() => {
-    const pieceLineup: string[] = [];
-    Object.values(gameData).forEach((tile) => {
-      if (tile.occupantId) {
-        pieceLineup.push(tile.occupantId);
-      }
-    });
-    return pieceLineup.filter(
-      (pieceId) => armyData[pieceId]?.team === teamTurn,
-    );
-    // override for generating turn queue
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [teamTurn]);
-
+export const GameBoard = ({
+  boardData,
+  armyData,
+  setBoardData,
+  setArmyData,
+}: {
+  boardData: Record<string, Tile>;
+  armyData: Record<string, PieceInterface>;
+  setBoardData: React.Dispatch<React.SetStateAction<Record<string, Tile>>>;
+  setArmyData: React.Dispatch<
+    React.SetStateAction<Record<string, PieceInterface>>
+  >;
+}) => {
   return (
     <DndProvider backend={HTML5Backend}>
       <GameBoardContainer>
-        {Object.values(gameData).map((tileData) => {
+        {Object.values(boardData).map((tileData) => {
           const pieceData = tileData.occupantId
             ? armyData[tileData.occupantId]
             : undefined;
@@ -44,7 +32,7 @@ export const GameBoard = () => {
               tileData={tileData}
               pieceData={pieceData}
               key={tileData.id}
-              setGameData={setGameData}
+              setGameData={setBoardData}
               setArmyData={setArmyData}
             />
           );
@@ -56,9 +44,9 @@ export const GameBoard = () => {
 
 const GameBoardContainer = styled.div`
   height: 100%;
+  padding: 6px;
   display: grid;
   aspect-ratio: 1;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(12, 1fr);
-  padding: 6px;
 `;
