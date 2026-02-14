@@ -1,26 +1,27 @@
 "use client";
 
-import { type Tile, Turrain } from "@/interface/tile";
+import { type Tile } from "@/interface/tile";
 import { type Dispatch, type SetStateAction } from "react";
-import styled from "styled-components";
 import { useDrop } from "react-dnd";
 import { isValidMove } from "@/helpers/MovementConfig";
 import { Piece } from "./Piece";
-import { fieldColor, mountainColor, forestColor } from "./styles/colors";
 import { PieceDragItem, PieceInterface } from "@/interface";
+import { GameTileContainer, TileLabel, DropOverlay } from "./BoardTileStyles";
 
 export interface BoardTileProps {
   tileData: Tile;
   pieceData?: PieceInterface;
   setGameData: Dispatch<SetStateAction<Record<string, Tile>>>;
+  setArmyData: Dispatch<SetStateAction<Record<string, PieceInterface>>>;
 }
 
 export const BoardTile: React.FC<BoardTileProps> = ({
   tileData,
   pieceData,
   setGameData,
+  setArmyData,
 }) => {
-  const { id, turrain } = tileData;
+  const { id, turrain, occupantId } = tileData;
 
   const [{ isOver, canDrop }, dropRef] = useDrop(() => {
     return {
@@ -32,6 +33,15 @@ export const BoardTile: React.FC<BoardTileProps> = ({
       },
       drop: (item: PieceDragItem) => {
         if (!isValidMove(item.piece, item.tile, tileData)) return;
+
+        if (occupantId) {
+          // register the capture in army data if there is an occupant
+          setArmyData((prev) => {
+            const newArmy = { ...prev };
+            newArmy[occupantId].isAlive = false;
+            return newArmy;
+          });
+        }
 
         setGameData((prev) => {
           const newData = { ...prev };
@@ -49,6 +59,7 @@ export const BoardTile: React.FC<BoardTileProps> = ({
           newData[id] = { ...newData[id], occupantId: pieceId };
           return newData;
         });
+
         return { targetTileId: id };
       },
       collect: (monitor) => ({
@@ -72,54 +83,3 @@ export const BoardTile: React.FC<BoardTileProps> = ({
     </GameTileContainer>
   );
 };
-
-const GameTileContainer = styled.div<{
-  turrain: Turrain;
-  $isOver?: boolean;
-  $canDrop?: boolean;
-  $occupied?: boolean;
-}>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--foreground);
-  position: relative;
-  background-color: ${({ turrain }) => {
-    switch (turrain) {
-      case Turrain.FIELD:
-        return fieldColor;
-      case Turrain.MOUNTAIN:
-        return mountainColor;
-      case Turrain.FOREST:
-        return forestColor;
-      default:
-        return fieldColor;
-    }
-  }};
-`;
-
-const DropOverlay = styled.div<{ $valid?: boolean }>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 10;
-  background: ${
-    ({ $valid }) =>
-      $valid
-        ? "rgba(76, 175, 80, 0.25)" // green for valid
-        : "rgba(244, 67, 54, 0.25)" // red for invalid
-  };
-  border: ${({ $valid }) =>
-    $valid ? "2px solid #4caf50" : "2px solid #f44336"};
-  box-shadow: ${({ $valid }) =>
-    $valid ? "0 0 8px #4caf50" : "0 0 8px #f44336"};
-`;
-
-const TileLabel = styled.p`
-  color: grey;
-  position: absolute;
-  cursor: default;
-`;

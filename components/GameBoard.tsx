@@ -14,8 +14,9 @@ export const GameBoard = () => {
   const [gameData, setGameData] = useState<Record<string, Tile>>(defaultGame);
   const [armyData, setArmyData] = useState(defaultPieces);
   const [teamTurn, setTeamTurn] = useState(teams[0]);
+  const [pieceTurn, setPieceTurn] = useState<string | null>(null);
 
-  console.log({ gameData, armyData });
+  console.log({ gameData, armyData, teamTurn, pieceTurn });
 
   const turnQueue = useMemo(() => {
     const pieceLineup: string[] = [];
@@ -44,6 +45,7 @@ export const GameBoard = () => {
               pieceData={pieceData}
               key={tileData.id}
               setGameData={setGameData}
+              setArmyData={setArmyData}
             />
           );
         })}
