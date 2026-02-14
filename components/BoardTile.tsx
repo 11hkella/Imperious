@@ -7,18 +7,20 @@ import { useDrop } from "react-dnd";
 import { isValidMove } from "@/helpers/MovementConfig";
 import { Piece } from "./Piece";
 import { fieldColor, mountainColor, forestColor } from "./styles/colors";
-import { PieceDragItem } from "@/interface";
+import { PieceDragItem, PieceInterface } from "@/interface";
 
 export interface BoardTileProps {
   tileData: Tile;
+  pieceData?: PieceInterface;
   setGameData: Dispatch<SetStateAction<Record<string, Tile>>>;
 }
 
 export const BoardTile: React.FC<BoardTileProps> = ({
   tileData,
+  pieceData,
   setGameData,
 }) => {
-  const { id, turrain, occupant } = tileData;
+  const { id, turrain } = tileData;
 
   const [{ isOver, canDrop }, dropRef] = useDrop(() => {
     return {
@@ -38,11 +40,13 @@ export const BoardTile: React.FC<BoardTileProps> = ({
           if (sourceTileId && newData[sourceTileId]) {
             newData[sourceTileId] = {
               ...newData[sourceTileId],
-              occupant: undefined,
+              occupantId: undefined,
             };
           }
           // Replace piece on target tile (capture/replace logic)
-          newData[id] = { ...newData[id], occupant: item.piece };
+          const { team, unitNumber, type } = item.piece;
+          const pieceId = `${type}-${unitNumber}-${team}`;
+          newData[id] = { ...newData[id], occupantId: pieceId };
           return newData;
         });
         return { targetTileId: id };
@@ -60,10 +64,9 @@ export const BoardTile: React.FC<BoardTileProps> = ({
       turrain={turrain}
       $isOver={isOver}
       $canDrop={canDrop}
-      $occupied={!!occupant}
-      aria-dropeffect={canDrop ? "move" : undefined}
+      $occupied={!!pieceData}
     >
-      <Piece piece={occupant} tile={tileData} />
+      <Piece piece={pieceData} tile={tileData} />
       <TileLabel>{id}</TileLabel>
       {isOver && <DropOverlay $valid={canDrop} />}
     </GameTileContainer>
