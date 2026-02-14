@@ -1,12 +1,13 @@
 "use client";
 
 import { type Tile, Turrain } from "@/interface/tile";
-import { type Dispatch, type SetStateAction, useRef } from "react";
+import { type Dispatch, type SetStateAction } from "react";
 import styled from "styled-components";
 import { useDrop } from "react-dnd";
 import { isValidMove } from "@/helpers/MovementConfig";
 import { Piece } from "./Piece";
 import { fieldColor, mountainColor, forestColor } from "./styles/colors";
+import { PieceDragItem } from "@/interface";
 
 export interface BoardTileProps {
   tileData: Tile;
@@ -18,15 +19,17 @@ export const BoardTile: React.FC<BoardTileProps> = ({
   setGameData,
 }) => {
   // TODO: tile should set its own state for performance optimization
-  const { id, turrain, occupant } = tileData;
+  const { id, turrain, occupant, position } = tileData;
 
   // Setup drop
   const [{ isOver, canDrop }, dropRef] = useDrop({
     accept: "PIECE",
-    canDrop: (item: any) => {
+    canDrop: (item: PieceDragItem) => {
       // Validate move
-      const fromTile = item.sourceTile || tileData;
-      return isValidMove(item.piece, fromTile, tileData);
+      const fromTile = item.tile;
+      const isvalid = isValidMove(item.piece, fromTile, tileData);
+      console.log({ item, fromTile, toTile: tileData, isvalid });
+      return isvalid;
     },
     drop: (item: any) => {
       // Only allow drop if valid
@@ -66,7 +69,7 @@ export const BoardTile: React.FC<BoardTileProps> = ({
       $occupied={!!occupant}
       aria-dropeffect={canDrop ? "move" : undefined}
     >
-      <Piece piece={occupant} />
+      <Piece piece={occupant} tile={tileData} />
       <TileLabel>{id}</TileLabel>
       {isOver && canDrop && <DropOverlay $valid />}
       {isOver && !canDrop && <DropOverlay />}

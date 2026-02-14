@@ -14,5 +14,10 @@ export interface Tile {
   id: string;
   turrain: Turrain;
   occupant?: PieceInterface;
-  position: { row: number; col: number };
+  position: TilePosition;
+}
+
+export interface TilePosition {
+  row: number;
+  col: number;
 }

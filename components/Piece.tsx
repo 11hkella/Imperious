@@ -11,6 +11,7 @@ import { KingIcon } from "./svg/KingIcon";
 import { PikemanIcon } from "./svg/PikemanIcon";
 import { SquireIcon } from "./svg/SquireIcon";
 import { SwordsmanNobleIcon } from "./svg/SwordsmanNobleIcon";
+import { Tile } from "@/interface";
 
 // Map PieceType enum to corresponding SVG component
 export const pieceTypeToSVG: Record<
@@ -29,13 +30,14 @@ export const pieceTypeToSVG: Record<
 
 export interface PieceProps {
   piece?: PieceInterface;
+  tile: Tile;
 }
 
-export const Piece: React.FC<PieceProps> = ({ piece }) => {
+export const Piece: React.FC<PieceProps> = ({ piece, tile }) => {
   // Setup drag
   const [{ isDragging }, dragRef] = useDrag({
     type: "PIECE",
-    item: { piece, tileId: piece?.tileId }, // tileId will be injected by BoardTile
+    item: { piece, tile }, // tileId will be injected by BoardTile
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),

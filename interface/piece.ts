@@ -1,7 +1,9 @@
+import { Tile } from "./tile";
+
 // Drag-and-drop payload for a piece
 export interface PieceDragItem {
   piece: PieceInterface;
-  sourceTile: import("./tile").Tile;
+  tile: Tile;
 }
 export enum PieceType {
   PIKE = "pike",
