@@ -37,7 +37,7 @@ export const Piece: React.FC<PieceProps> = ({ piece, tile }) => {
   // Setup drag
   const [{ isDragging }, dragRef] = useDrag({
     type: "PIECE",
-    item: { piece, tile }, // tileId will be injected by BoardTile
+    item: { piece, tile },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -47,12 +47,7 @@ export const Piece: React.FC<PieceProps> = ({ piece, tile }) => {
   const SvgComponent = pieceTypeToSVG[piece.type];
   if (!SvgComponent) return null;
   return (
-    <PieceIconContainer
-      ref={dragRef}
-      $isDragging={isDragging}
-      aria-grabbed={isDragging}
-      tabIndex={0}
-    >
+    <PieceIconContainer ref={dragRef} $isDragging={isDragging} tabIndex={0}>
       <SvgComponent />
     </PieceIconContainer>
   );

@@ -18,42 +18,40 @@ export const BoardTile: React.FC<BoardTileProps> = ({
   tileData,
   setGameData,
 }) => {
-  // TODO: tile should set its own state for performance optimization
   const { id, turrain, occupant } = tileData;
 
-  // Setup drop
-  const [{ isOver, canDrop }, dropRef] = useDrop({
-    accept: "PIECE",
-    canDrop: (item: PieceDragItem) => {
-      // Validate move
-      const fromTile = item.tile;
-      const isvalid = isValidMove(item.piece, fromTile, tileData);
-      console.log({ item, fromTile, toTile: tileData, isvalid });
-      return isvalid;
-    },
-    drop: (item: PieceDragItem) => {
-      // Only allow drop if valid
-      if (!isValidMove(item.piece, item.tile, tileData)) return;
-      setGameData((prev) => {
-        const newData = { ...prev };
-        const sourceTileId = item.tile.id;
-        // Remove piece from source tile
-        if (sourceTileId && newData[sourceTileId]) {
-          newData[sourceTileId] = {
-            ...newData[sourceTileId],
-            occupant: undefined,
-          };
-        }
-        // Replace piece on target tile (capture/replace logic)
-        newData[id] = { ...newData[id], occupant: item.piece };
-        return newData;
-      });
-      return { targetTileId: id };
-    },
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(),
-    }),
+  const [{ isOver, canDrop }, dropRef] = useDrop(() => {
+    return {
+      accept: "PIECE",
+      canDrop: (item: PieceDragItem) => {
+        const fromTile = item.tile;
+        const isvalid = isValidMove(item.piece, fromTile, tileData);
+        return isvalid;
+      },
+      drop: (item: PieceDragItem) => {
+        if (!isValidMove(item.piece, item.tile, tileData)) return;
+
+        setGameData((prev) => {
+          const newData = { ...prev };
+          const sourceTileId = item.tile.id;
+          // Remove piece from source tile
+          if (sourceTileId && newData[sourceTileId]) {
+            newData[sourceTileId] = {
+              ...newData[sourceTileId],
+              occupant: undefined,
+            };
+          }
+          // Replace piece on target tile (capture/replace logic)
+          newData[id] = { ...newData[id], occupant: item.piece };
+          return newData;
+        });
+        return { targetTileId: id };
+      },
+      collect: (monitor) => ({
+        isOver: monitor.isOver(),
+        canDrop: monitor.canDrop(),
+      }),
+    };
   });
 
   return (
@@ -67,8 +65,7 @@ export const BoardTile: React.FC<BoardTileProps> = ({
     >
       <Piece piece={occupant} tile={tileData} />
       <TileLabel>{id}</TileLabel>
-      {isOver && canDrop && <DropOverlay $valid />}
-      {isOver && !canDrop && <DropOverlay />}
+      {isOver && <DropOverlay $valid={canDrop} />}
     </GameTileContainer>
   );
 };

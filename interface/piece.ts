@@ -19,8 +19,8 @@ export enum PieceType {
 }
 
 export interface PieceInterface {
-  id: string;
   type: PieceType;
+  unitNumber: number;
   team: string;
   hasMoved: boolean;
   isAlive: boolean;
