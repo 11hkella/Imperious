@@ -1,3 +1,36 @@
+#
+
+# File Structure Overview
+
+#
+
+The project is organized as follows:
+
+- `app/` — Main Next.js App Router directory. Contains:
+  - `GameBoardClient.tsx` — Main game board client component (board state, rendering, DnD logic)
+  - `page.tsx` — App entry point
+  - `layout.tsx` — Root layout
+  - `globals.css`, `pageStyles.ts` — Global and page-level styles
+- `components/` — UI components:
+  - `BoardTile.tsx` — Board tile (DnD drop logic, tile rendering)
+  - `Piece.tsx` — Piece rendering
+  - `styles/colors.ts` — Color/style constants
+  - `svg/` — SVG icons for pieces and terrain
+- `helpers/` — Game logic and data initialization:
+  - `addPieceToTile.ts` — Utility for placing pieces
+  - `initalizeBoardData.ts` — Board grid/terrain setup
+  - `initializeArmyData.ts` — Army composition
+  - `initializeGameData.ts` — Game setup (board + armies)
+  - `MovementConfig.ts` — Move validation
+  - `terrainConfig.ts` — Terrain configuration
+- `interface/` — TypeScript interfaces and enums:
+  - `index.ts` — Barrel export
+  - `piece.ts`, `tile.ts`, `movement.ts` — Entity definitions
+- `public/` — Static assets
+- `package.json`, `tsconfig.json`, `next.config.ts`, etc. — Project config
+
+Refer to this section for a high-level understanding of where to find and place code.
+
 # Copilot Instructions for Imperious
 
 ## Project Overview
