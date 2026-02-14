@@ -6,7 +6,6 @@ import { GameBoard } from "@/components/GameBoard";
 export default async function Page() {
   // Initialize game data on the server
   // todo: fetch game log from database
-
   return (
     <PageWrapper>
       {/* <h1>Welcome to Imperious</h1> */}
