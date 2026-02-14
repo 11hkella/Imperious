@@ -10,7 +10,7 @@ import { useInitGame } from "./useInitGame";
 
 export const GameBoard = () => {
   const { mapData: defaultGame } = useInitGame();
-  const [gameData, setGameData] = useState<Record<string, Tile>>(defaultGame);]
+  const [gameData, setGameData] = useState<Record<string, Tile>>(defaultGame);
 
   return (
     <DndProvider backend={HTML5Backend}>
