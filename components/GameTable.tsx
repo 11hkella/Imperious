@@ -29,7 +29,7 @@ export const GameTable = () => {
 
   const [pieceTurn, setPieceTurn] = useState<string | null>(turnQueue[0]);
 
-  console.log({ gameData, armyData, teamTurn, pieceTurn });
+  console.log({ gameData, armyData, teamTurn, pieceTurn, turnQueue });
 
   return (
     <GameTableContainer>
