@@ -14,10 +14,7 @@ import { SwordsmanNobleIcon } from "./svg/SwordsmanNobleIcon";
 import { Tile } from "@/interface";
 
 // Map PieceType enum to corresponding SVG component
-export const pieceTypeToSVG: Record<
-  PieceTypeEnum,
-  React.FC<{ height?: string; width?: string }>
-> = {
+export const pieceTypeToSVG: Record<PieceTypeEnum, React.FC> = {
   [PieceTypeEnum.ARCHER]: ArcherIcon,
   [PieceTypeEnum.AXE]: AxemanIcon,
   [PieceTypeEnum.NOBLEAXE]: AxemanNobleIcon,

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { PageWrapper } from "./pageStyles";
-import { GameBoard } from "@/components/GameBoard";
+import { GameTable } from "@/components/GameTable";
 
 // Server Component: initializes game data and passes to client
 export default async function Page() {
@@ -10,7 +10,7 @@ export default async function Page() {
     <PageWrapper>
       {/* <h1>Welcome to Imperious</h1> */}
       <Suspense fallback={<div>Loading game board...</div>}>
-        <GameBoard />
+        <GameTable />
       </Suspense>
     </PageWrapper>
   );

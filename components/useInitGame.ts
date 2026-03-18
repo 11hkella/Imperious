@@ -1,43 +1,47 @@
-import { PieceInterface, Tile, Turrain } from "@/interface";
+import { Army, Tile, Turrain } from "@/interface";
 import { useMemo } from "react";
 import { PieceType } from "@/interface";
 import { configuredTurrain } from "@/helpers/terrainConfig";
 import { Board } from "@/interface/board";
 
-export const useInitGame = () => {
-  const { redArmy, blueArmy, mapData } = useMemo(() => {
+export const useInitGame = (teams: string[]) => {
+  const { armyData, mapData } = useMemo(() => {
     // Todo: create placement stage for player setup
-    const placementMapRed: PlacementMap = {
-      [`${PieceType.ARCHER}-1`]: "1-1",
-      [`${PieceType.AXE}-1`]: "1-2",
-      [`${PieceType.CAVALRY}-1`]: "1-3",
-      [`${PieceType.KING}-1`]: "1-4",
-      [`${PieceType.NOBLEAXE}-1`]: "1-5",
-      [`${PieceType.NOBLESWORD}-1`]: "1-6",
-      [`${PieceType.PIKE}-1`]: "1-7",
-      [`${PieceType.SQUIRE}-1`]: "1-8",
-    };
-    const placementMapBlue: PlacementMap = {
-      [`${PieceType.ARCHER}-1`]: "12-1",
-      [`${PieceType.AXE}-1`]: "12-2",
-      [`${PieceType.CAVALRY}-1`]: "12-3",
-      [`${PieceType.KING}-1`]: "12-4",
-      [`${PieceType.NOBLEAXE}-1`]: "12-5",
-      [`${PieceType.NOBLESWORD}-1`]: "12-6",
-      [`${PieceType.PIKE}-1`]: "12-7",
-      [`${PieceType.SQUIRE}-1`]: "12-8",
-    };
+    const intialPlacementMap: PlacementMap[] = [
+      {
+        [`${PieceType.ARCHER}-1-${teams[0]}`]: "1-1",
+        [`${PieceType.AXE}-1-${teams[0]}`]: "1-2",
+        [`${PieceType.CAVALRY}-1-${teams[0]}`]: "1-3",
+        [`${PieceType.KING}-1-${teams[0]}`]: "1-4",
+        [`${PieceType.NOBLEAXE}-1-${teams[0]}`]: "1-5",
+        [`${PieceType.NOBLESWORD}-1-${teams[0]}`]: "1-6",
+        [`${PieceType.PIKE}-1-${teams[0]}`]: "1-7",
+        [`${PieceType.SQUIRE}-1-${teams[0]}`]: "1-8",
+      },
+      {
+        [`${PieceType.ARCHER}-1-${teams[1]}`]: "12-1",
+        [`${PieceType.AXE}-1-${teams[1]}`]: "12-2",
+        [`${PieceType.CAVALRY}-1-${teams[1]}`]: "12-3",
+        [`${PieceType.KING}-1-${teams[1]}`]: "12-4",
+        [`${PieceType.NOBLEAXE}-1-${teams[1]}`]: "12-5",
+        [`${PieceType.NOBLESWORD}-1-${teams[1]}`]: "12-6",
+        [`${PieceType.PIKE}-1-${teams[1]}`]: "12-7",
+        [`${PieceType.SQUIRE}-1-${teams[1]}`]: "12-8",
+      },
+    ];
 
-    const redArmy = initializeArmyData("Red");
-    const blueArmy = initializeArmyData("Blue");
+    const armies = teams.map((teamName) => initializeArmyData(teamName));
     const mapData = initializeMapData();
-    placeArmy(redArmy, placementMapRed, mapData);
-    placeArmy(blueArmy, placementMapBlue, mapData);
+    armies.forEach((_army, index) => {
+      placeArmy(teams[index], intialPlacementMap[index], mapData);
+    });
 
-    return { redArmy, blueArmy, mapData };
-  }, []);
+    const armyData = armies.reduce((acc, army) => ({ ...acc, ...army }), {});
 
-  return { redArmy, blueArmy, mapData };
+    return { armyData, mapData };
+  }, [teams]);
+
+  return { pieceData: armyData, mapData };
 };
 
 const initializeMapData = (): Board => {
@@ -57,7 +61,7 @@ const initializeMapData = (): Board => {
   return mapData;
 };
 
-const initializeArmyData = (teamName: string): PieceInterface[] => {
+const initializeArmyData = (teamName: string) => {
   const armyComposition = {
     [PieceType.ARCHER]: 1,
     [PieceType.AXE]: 2,
@@ -69,34 +73,33 @@ const initializeArmyData = (teamName: string): PieceInterface[] => {
     [PieceType.SQUIRE]: 1,
   };
 
-  const army = [] as PieceInterface[];
+  const army = {} as Army;
 
   Object.entries(armyComposition).forEach(([pieceType, pieceCount]) => {
     for (let i = 1; i <= pieceCount; i++) {
-      army.push({
+      army[`${pieceType}-${i}-${teamName}`] = {
         type: pieceType as PieceType,
         unitNumber: i,
         team: teamName,
         hasMoved: false,
         isAlive: true,
-      });
+      };
     }
   });
+
   return army;
 };
 
 const placeArmy = (
-  army: PieceInterface[],
+  teamName: string,
   placementMap: PlacementMap,
   board: Board,
 ) => {
   Object.entries(placementMap).forEach(([pieceId, tileId]) => {
     const [pieceType, unitNumber] = pieceId.split("-");
-    const piece = army.find(
-      (p) => p.type === pieceType && p.unitNumber === parseInt(unitNumber),
-    );
-    console.log({ pieceId, tileId, piece });
-    if (board[tileId]) board[tileId].occupant = piece;
+    const unitKey = `${pieceType}-${unitNumber}-${teamName}`;
+
+    if (board[tileId]) board[tileId].occupantId = unitKey;
   });
 };
 
