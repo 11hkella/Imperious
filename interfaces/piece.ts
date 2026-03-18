@@ -1,10 +1,3 @@
-import { Tile } from "./tile";
-
-// Drag-and-drop payload for a piece
-export interface PieceDragItem {
-  piece: PieceInterface;
-  tile: Tile;
-}
 export enum PieceType {
   PIKE = "pike",
   AXE = "axe",
@@ -22,6 +15,10 @@ export interface PieceInterface {
   type: PieceType;
   unitNumber: number;
   team: string;
-  hasMoved: boolean;
-  isAlive: boolean;
+  position: {
+    current: string; // row-col
+    previous: string; // row-col
+  };
 }
+// isAlive => if current position then isAlive = true
+// hasMoved => if previous position then hasMoved = true

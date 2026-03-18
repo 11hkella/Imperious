@@ -12,11 +12,5 @@ export enum Turrain {
 export interface Tile {
   id: string;
   turrain: Turrain;
-  occupantId?: string;
-  position: TilePosition;
-}
-
-export interface TilePosition {
-  row: number;
-  col: number;
+  position: string; // row-col
 }

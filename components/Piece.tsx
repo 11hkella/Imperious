@@ -2,31 +2,9 @@
 
 import styled, { css } from "styled-components";
 import { useDrag } from "react-dnd";
-import {
-  PieceType as PieceTypeEnum,
-  PieceInterface,
-} from "../interfaces/piece";
-import { ArcherIcon } from "../public/svg/ArcherIcon";
-import { AxemanIcon } from "../public/svg/AxemanIcon";
-import { AxemanNobleIcon } from "../public/svg/AxemanNobleIcon";
-import { CalvaryIcon } from "../public/svg/CalvaryIcon";
-import { KingIcon } from "../public/svg/KingIcon";
-import { PikemanIcon } from "../public/svg/PikemanIcon";
-import { SquireIcon } from "../public/svg/SquireIcon";
-import { SwordsmanNobleIcon } from "../public/svg/SwordsmanNobleIcon";
+import { PieceInterface } from "../interfaces/piece";
 import { Tile } from "@/interfaces";
-
-// Map PieceType enum to corresponding SVG component
-export const pieceTypeToSVG: Record<PieceTypeEnum, React.FC> = {
-  [PieceTypeEnum.ARCHER]: ArcherIcon,
-  [PieceTypeEnum.AXE]: AxemanIcon,
-  [PieceTypeEnum.NOBLEAXE]: AxemanNobleIcon,
-  [PieceTypeEnum.CAVALRY]: CalvaryIcon,
-  [PieceTypeEnum.KING]: KingIcon,
-  [PieceTypeEnum.PIKE]: PikemanIcon,
-  [PieceTypeEnum.SQUIRE]: SquireIcon,
-  [PieceTypeEnum.NOBLESWORD]: SwordsmanNobleIcon,
-};
+import { pieceSvgConfig } from "@/configs";
 
 export interface PieceProps {
   piece?: PieceInterface;
@@ -44,7 +22,7 @@ export const Piece: React.FC<PieceProps> = ({ piece, tile }) => {
   });
 
   if (!piece) return null;
-  const SvgComponent = pieceTypeToSVG[piece.type];
+  const SvgComponent = pieceSvgConfig[piece.type];
   if (!SvgComponent) return null;
   return (
     <PieceIconContainer ref={dragRef} $isDragging={isDragging} tabIndex={0}>

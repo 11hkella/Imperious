@@ -3,10 +3,10 @@
 import { type Tile } from "@/interfaces/tile";
 import { type Dispatch, type SetStateAction } from "react";
 import { useDrop } from "react-dnd";
-import { isValidMove } from "@/configs/movementConfig";
 import { Piece } from "./Piece";
-import { PieceDragItem, PieceInterface } from "@/interfaces";
+import { PieceInterface } from "@/interfaces";
 import { GameTileContainer, TileLabel, DropOverlay } from "./BoardTileStyles";
+import { useMovePiece } from "./useMovePiece";
 
 export interface BoardTileProps {
   tileData: Tile;
@@ -22,6 +22,7 @@ export const BoardTile: React.FC<BoardTileProps> = ({
   setArmyData,
 }) => {
   const { id, turrain, occupantId } = tileData;
+  const { isValidMove } = useMovePiece();
 
   const [{ isOver, canDrop }, dropRef] = useDrop(() => {
     return {
@@ -83,3 +84,9 @@ export const BoardTile: React.FC<BoardTileProps> = ({
     </GameTileContainer>
   );
 };
+
+// Drag-and-drop payload for a piece
+interface PieceDragItem {
+  piece: PieceInterface;
+  tile: Tile;
+}
