@@ -1,19 +1,12 @@
 "use client";
 
-import { type Tile } from "@/interface/tile";
+import { type Tile } from "@/interfaces/tile";
 import { type Dispatch, type SetStateAction } from "react";
 import { useDrop } from "react-dnd";
-import { isValidMove } from "@/helpers/MovementConfig";
 import { Piece } from "./Piece";
-import { PieceDragItem, PieceInterface } from "@/interface";
+import { PieceInterface } from "@/interfaces";
 import { GameTileContainer, TileLabel, DropOverlay } from "./BoardTileStyles";
-
-export interface BoardTileProps {
-  tileData: Tile;
-  pieceData?: PieceInterface;
-  setGameData: Dispatch<SetStateAction<Record<string, Tile>>>;
-  setArmyData: Dispatch<SetStateAction<Record<string, PieceInterface>>>;
-}
+import { useMovePiece } from "./useMovePiece";
 
 export const BoardTile: React.FC<BoardTileProps> = ({
   tileData,
@@ -21,7 +14,8 @@ export const BoardTile: React.FC<BoardTileProps> = ({
   setGameData,
   setArmyData,
 }) => {
-  const { id, turrain, occupantId } = tileData;
+  const { id, turrain } = tileData;
+  const { isValidMove } = useMovePiece();
 
   const [{ isOver, canDrop }, dropRef] = useDrop(() => {
     return {
@@ -83,3 +77,16 @@ export const BoardTile: React.FC<BoardTileProps> = ({
     </GameTileContainer>
   );
 };
+
+interface BoardTileProps {
+  tileData: Tile;
+  pieceData?: PieceInterface;
+  setGameData: Dispatch<SetStateAction<Record<string, Tile>>>;
+  setArmyData: Dispatch<SetStateAction<Record<string, PieceInterface>>>;
+}
+
+// Drag-and-drop payload for a piece
+interface PieceDragItem {
+  piece: PieceInterface;
+  tile: Tile;
+}

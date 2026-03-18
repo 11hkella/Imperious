@@ -1,7 +1,6 @@
 "use client";
 
-import { PieceInterface, Tile } from "@/interface";
-import { useMemo } from "react";
+import { PieceInterface, Tile } from "@/interfaces";
 import styled from "styled-components";
 
 export const TurnTracker = ({

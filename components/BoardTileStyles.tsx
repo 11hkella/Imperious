@@ -1,4 +1,4 @@
-import { Turrain } from "@/interface";
+import { Turrain } from "@/interfaces";
 import styled from "styled-components";
 import { fieldColor, mountainColor, forestColor } from "./styles/colors";
 

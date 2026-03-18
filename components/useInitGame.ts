@@ -1,8 +1,6 @@
-import { Army, Tile, Turrain } from "@/interface";
+import { configuredTurrain, movementConfig } from "@/configs";
+import { PieceType, Tile, Turrain, Army, Board } from "@/interfaces";
 import { useMemo } from "react";
-import { PieceType } from "@/interface";
-import { configuredTurrain } from "@/helpers/terrainConfig";
-import { Board } from "@/interface/board";
 
 export const useInitGame = (teams: string[]) => {
   const { armyData, mapData } = useMemo(() => {
@@ -32,11 +30,14 @@ export const useInitGame = (teams: string[]) => {
 
     const armies = teams.map((teamName) => initializeArmyData(teamName));
     const mapData = initializeMapData();
-    armies.forEach((_army, index) => {
-      placeArmy(teams[index], intialPlacementMap[index], mapData);
-    });
 
-    const armyData = armies.reduce((acc, army) => ({ ...acc, ...army }), {});
+    const armyData = armies.reduce(
+      (acc, army, index) => ({
+        ...acc,
+        ...placeArmy(teams[index], intialPlacementMap[index], army),
+      }),
+      {},
+    );
 
     return { armyData, mapData };
   }, [teams]);
@@ -54,7 +55,7 @@ const initializeMapData = (): Board => {
       mapData[id] = {
         id,
         turrain: configuredTurrain[id] || Turrain.FIELD,
-        position: { row, col },
+        position: `${row}-${col}`,
       };
     }
   }
@@ -77,12 +78,13 @@ const initializeArmyData = (teamName: string) => {
 
   Object.entries(armyComposition).forEach(([pieceType, pieceCount]) => {
     for (let i = 1; i <= pieceCount; i++) {
+      const movementInfo = movementConfig[pieceType as PieceType];
       army[`${pieceType}-${i}-${teamName}`] = {
         type: pieceType as PieceType,
         unitNumber: i,
         team: teamName,
-        hasMoved: false,
-        isAlive: true,
+        ...movementInfo,
+        position: {},
       };
     }
   });
@@ -93,14 +95,15 @@ const initializeArmyData = (teamName: string) => {
 const placeArmy = (
   teamName: string,
   placementMap: PlacementMap,
-  board: Board,
+  army: Army,
 ) => {
   Object.entries(placementMap).forEach(([pieceId, tileId]) => {
     const [pieceType, unitNumber] = pieceId.split("-");
     const unitKey = `${pieceType}-${unitNumber}-${teamName}`;
 
-    if (board[tileId]) board[tileId].occupantId = unitKey;
+    if (army[unitKey]) army[unitKey].position.current = tileId;
   });
+  return army;
 };
 
 type PlacementMap = Record<string, string>;

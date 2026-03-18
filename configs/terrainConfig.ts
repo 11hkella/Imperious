@@ -1,4 +1,4 @@
-import { Turrain } from "@/interface";
+import { Turrain } from "@/interfaces";
 
 export const configuredTurrain: Record<string, Turrain> = {
   "1-1": Turrain.MOUNTAIN,
