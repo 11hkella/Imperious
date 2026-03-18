@@ -1,3 +1,5 @@
+import { Direction } from ".";
+
 export enum PieceType {
   PIKE = "pike",
   AXE = "axe",
@@ -15,9 +17,13 @@ export interface PieceInterface {
   type: PieceType;
   unitNumber: number;
   team: string;
+  moveRange: number;
+  canTraverseForests: boolean;
+  canShoot: boolean;
+  direction: Direction;
   position: {
-    current: string; // row-col
-    previous: string; // row-col
+    current?: string; // row-col
+    previous?: string; // row-col
   };
 }
 // isAlive => if current position then isAlive = true
