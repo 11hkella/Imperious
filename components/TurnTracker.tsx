@@ -1,6 +1,6 @@
 "use client";
 
-import { PieceInterface, Tile } from "@/interface";
+import { PieceInterface, Tile } from "@/interfaces";
 import { useMemo } from "react";
 import styled from "styled-components";
 

@@ -1,8 +1,8 @@
-import { Army, Tile, Turrain } from "@/interface";
+import { Army, Tile, Turrain } from "@/interfaces";
 import { useMemo } from "react";
-import { PieceType } from "@/interface";
-import { configuredTurrain } from "@/helpers/terrainConfig";
-import { Board } from "@/interface/board";
+import { PieceType } from "@/interfaces";
+import { configuredTurrain } from "@/configs/terrainConfig";
+import { Board } from "@/interfaces/board";
 
 export const useInitGame = (teams: string[]) => {
   const { armyData, mapData } = useMemo(() => {

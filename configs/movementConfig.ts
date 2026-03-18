@@ -4,10 +4,13 @@ import {
   Tile,
   TilePosition,
   Turrain,
-} from "@/interface";
-import { Direction } from "@/interface/movement";
+} from "@/interfaces";
+import { Direction } from "@/interfaces/movement";
 
-const getDistanceAndDirection = (from: TilePosition, to: TilePosition) => {
+export const getDistanceAndDirection = (
+  from: TilePosition,
+  to: TilePosition,
+) => {
   const dRow = to.row - from.row;
   const dCol = to.col - from.col;
   const absRow = Math.abs(dRow);
@@ -21,7 +24,7 @@ const getDistanceAndDirection = (from: TilePosition, to: TilePosition) => {
   return { distance: Math.max(absRow, absCol), direction };
 };
 
-const isValidMove = (piece: PieceInterface, from: Tile, to: Tile) => {
+export const isValidMove = (piece: PieceInterface, from: Tile, to: Tile) => {
   if (!piece || !from) return false;
   const config = movementConfig[piece.type];
   if (!config) return false;
@@ -42,7 +45,7 @@ const isValidMove = (piece: PieceInterface, from: Tile, to: Tile) => {
   return true;
 };
 
-const movementConfig = {
+export const movementConfig = {
   [PieceType.KING]: {
     moveRange: 1,
     canTraverseForests: false,
@@ -92,5 +95,3 @@ const movementConfig = {
     direction: Direction.LSHAPED,
   },
 };
-
-export { movementConfig, getDistanceAndDirection, isValidMove };

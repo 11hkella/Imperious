@@ -1,11 +1,11 @@
 "use client";
 
-import { type Tile } from "@/interface/tile";
+import { type Tile } from "@/interfaces/tile";
 import { type Dispatch, type SetStateAction } from "react";
 import { useDrop } from "react-dnd";
-import { isValidMove } from "@/helpers/MovementConfig";
+import { isValidMove } from "@/configs/movementConfig";
 import { Piece } from "./Piece";
-import { PieceDragItem, PieceInterface } from "@/interface";
+import { PieceDragItem, PieceInterface } from "@/interfaces";
 import { GameTileContainer, TileLabel, DropOverlay } from "./BoardTileStyles";
 
 export interface BoardTileProps {

@@ -2,16 +2,19 @@
 
 import styled, { css } from "styled-components";
 import { useDrag } from "react-dnd";
-import { PieceType as PieceTypeEnum, PieceInterface } from "../interface/piece";
-import { ArcherIcon } from "./svg/ArcherIcon";
-import { AxemanIcon } from "./svg/AxemanIcon";
-import { AxemanNobleIcon } from "./svg/AxemanNobleIcon";
-import { CalvaryIcon } from "./svg/CalvaryIcon";
-import { KingIcon } from "./svg/KingIcon";
-import { PikemanIcon } from "./svg/PikemanIcon";
-import { SquireIcon } from "./svg/SquireIcon";
-import { SwordsmanNobleIcon } from "./svg/SwordsmanNobleIcon";
-import { Tile } from "@/interface";
+import {
+  PieceType as PieceTypeEnum,
+  PieceInterface,
+} from "../interfaces/piece";
+import { ArcherIcon } from "../public/svg/ArcherIcon";
+import { AxemanIcon } from "../public/svg/AxemanIcon";
+import { AxemanNobleIcon } from "../public/svg/AxemanNobleIcon";
+import { CalvaryIcon } from "../public/svg/CalvaryIcon";
+import { KingIcon } from "../public/svg/KingIcon";
+import { PikemanIcon } from "../public/svg/PikemanIcon";
+import { SquireIcon } from "../public/svg/SquireIcon";
+import { SwordsmanNobleIcon } from "../public/svg/SwordsmanNobleIcon";
+import { Tile } from "@/interfaces";
 
 // Map PieceType enum to corresponding SVG component
 export const pieceTypeToSVG: Record<PieceTypeEnum, React.FC> = {

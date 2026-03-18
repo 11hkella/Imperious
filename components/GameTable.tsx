@@ -1,6 +1,6 @@
 "use client";
 
-import { Tile } from "@/interface";
+import { Tile } from "@/interfaces";
 import { useState, useMemo } from "react";
 import styled from "styled-components";
 import { GameBoard } from "./GameBoard";

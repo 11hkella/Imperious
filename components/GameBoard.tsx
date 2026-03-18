@@ -3,9 +3,9 @@
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { BoardTile } from "@/components/BoardTile";
-import type { Tile } from "@/interface/tile";
+import type { Tile } from "@/interfaces/tile";
 import styled from "styled-components";
-import { PieceInterface } from "@/interface";
+import { PieceInterface } from "@/interfaces";
 
 export const GameBoard = ({
   boardData,
